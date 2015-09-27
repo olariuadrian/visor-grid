@@ -6,7 +6,7 @@ Do you want to see Visor Grid directive in action? Visit http://olariuadrian.git
 
 # Installation
 
-Installation is easy as Visor Grid has minimal dependencies - only the AngularJS and Angular-Bootstrap are required.
+Installation is easy as Visor Grid has minimal dependencies - only the AngularJS, Angular-Bootstrap and Font-Awesome are required.
 
 #### Install with Bower
 ```sh
