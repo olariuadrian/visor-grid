@@ -1,0 +1,25 @@
+{
+  "name": "visor-grid-sample",
+  "version": "1.0.0",
+  "homepage": "https://github.com/olariuadrian/visor-grid/tree/gh-pages",
+  "authors": [
+    {"name": "Adrian Olariu", "email": "olariuadrian@gmail.com"}
+  ],
+  "main": "js/client.js",
+  "keywords": [
+    "sample",
+    "grid",
+    "table"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "visor-grid": "0.1.0"
+  }
+}
