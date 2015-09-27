@@ -20,6 +20,6 @@
     "tests"
   ],
   "dependencies": {
-    "visor-grid": "0.1.0"
+    "visor-grid": "*"
   }
 }
