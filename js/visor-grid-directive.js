@@ -1,6 +1,6 @@
 (function(angular) {
 
-    angular.module('visorGridDirective', [])
+    angular.module('visorGridDirective', ['ui.bootstrap'])
 
     .directive('visorGrid',function($compile, $rootScope, $filter, $timeout) {
         return {
