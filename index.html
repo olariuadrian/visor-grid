@@ -1,12 +1,15 @@
 <!doctype html>
-<html>
+<html ng-app="VisorGridSample">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Visor Grid</title>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+
+
+    <link rel="stylesheet" href="css/styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -14,11 +17,31 @@
 </head>
 
 <body>
-    <h1>Visor Grid</h1>
+    <div class="container">
 
-    
+        <h1>Visor Grid</h1>
+
+        <div ng-controller="MainController">
+    		<visor-grid rows="countries" row-count="totalItems"
+    			current-page="currentPage" items-per-page="itemsPerPage" page-change="pageChanged()"
+    			control="vGridControl">
+    				<visor-grid-col header="#" is-index="true"></visor-grid-col>
+    				<visor-grid-col header="Country" field="countryName">{{countryName}}</visor-grid-col>
+    				<visor-grid-col header="Continent">{{continentName}}</visor-grid-col>
+    				<visor-grid-col header="Currency Code">{{currencyCode}}</visor-grid-col>
+    				<visor-grid-col header="Population">{{population}}</visor-grid-col>
+
+    				<visor-grid-col header="Action">
+    					<a href="#" class="btn btn-default btn-xs">View</a>
+    				</visor-grid-col>
+    		</visor-grid>
+        </div>
+
+    </div>
 
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular-route.js"></script>
 

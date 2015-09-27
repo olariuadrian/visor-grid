@@ -1,6 +1,6 @@
 (function(angular) {
 
-    var VisorGridSample = angular.module('VisorGridSample', ['ngRoute']);
+    var VisorGridSample = angular.module('VisorGridSample', ['ngRoute', 'visorGridDirective']);
 
     VisorGridSample.config(['$routeProvider', '$locationProvider',
         function($routeProvider, $locationProvider) {
@@ -35,8 +35,9 @@
                         limit: parseInt($scope.itemsPerPage, 10)
                     }
                 }).then(function(response) {
-                    $scope.countries = response.countries.country;
-                    $scope.totalItems = response.cnt;
+                    console.log(response.data);
+                    $scope.countries = response.data.countries.country;
+                    $scope.totalItems = $scope.countries.length;
                 });
             };
 
