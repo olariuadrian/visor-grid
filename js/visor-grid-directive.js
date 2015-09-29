@@ -195,20 +195,7 @@
 
             '<div class="visor-grid">\n' +
             '    <div style="display: none" ng-transclude></div>\n' +
-            '    <div class="row" style="position: relative">\n' +
-            '        <div class="dropdown vg-col-dropdown" style="position: absolute; top: 8px; right: 3px;">\n' +
-            '            <a id="dLabel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
-            '                <i class="fa fa-columns"></i>\n' +
-            '            </a>\n' +
-            '            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" style="right: 0;left: auto;">\n' +
-            '                <li ng-repeat="col in columns">\n' +
-            '                    <a href="javascript: void();" ng-click="selectColumn($event, col)">\n' +
-            '                        <input type="checkbox" ng-model="col.visible" ng-click="$event.preventDefault()" />\n' +
-            '                        {{col.header}}\n' +
-            '                    </a>\n' +
-            '                </li>\n' +
-            '            </ul>\n' +
-            '        </div>\n' +
+            '    <div class="row">\n' +
             '        <div class="table-responsive">\n' +
             '            <table class="table table-striped table-hover">\n' +
             '                <thead>\n' +
@@ -219,11 +206,26 @@
             '                                <span class="caret" style="margin: 10px 5px;"></span>\n' +
             '                            </span>\n' +
             '                        </td>\n' +
+            '                        <td width="20" style="background: #fff;">\n' +//#d6e8ff;
+            '                           <div class="dropdown vg-col-dropdown">\n' +
+            '                               <a id="dLabel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+            '                                   <i class="fa fa-chevron-down"></i>\n' +
+            '                               </a>\n' +
+            '                               <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" style="right: 0;left: auto;">\n' +
+            '                                   <li ng-repeat="col in columns">\n' +
+            '                                       <a href="javascript: void();" ng-click="selectColumn($event, col)">\n' +
+            '                                           <input type="checkbox" ng-model="col.visible" ng-click="$event.preventDefault()" />\n' +
+            '                                           {{col.header}}\n' +
+            '                                       </a>\n' +
+            '                                   </li>\n' +
+            '                               </ul>\n' +
+            '                           </div>\n' +
+            '                        </td>\n' +
             '                    </tr>\n' +
             '                </thead>\n' +
             '                <tbody>\n' +
             '                    <tr ng-repeat="row in rows">\n' +
-            '                        <td ng-repeat="col in columns" ng-if="col.visible">\n' +
+            '                        <td ng-repeat="col in columns" colspan="{{$last?2:1}}" ng-if="col.visible">\n' +
             '                            <visor-grid-cell\n' +
             '                                col="col"\n' +
             '                                row-data="row"\n' +
