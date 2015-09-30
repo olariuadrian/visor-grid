@@ -10,7 +10,7 @@
                 control: '=?',
 
                 showPagination: '=?',
-                pageChange: '&?',
+                _pageChange: '&?pageChange',
                 currentPage: '=?',
                 itemsPerPage: '=?',
 
@@ -32,7 +32,25 @@
 
                 var columns = $scope.columns = $scope.control.columns = [];
 
-                this.addColumn = function(colScope) {
+                this.addColumn = addColumn;
+                this.changeColumnVisibility = $scope.control.changeColumnVisibility = changeColumnVisibility;
+                $scope.changeSortBy = changeSortBy;
+                $scope.pageChange = pageChange;
+                $scope.control.getHeaders = getHeaders;
+
+                $scope.$watch('itemsPerPage', function() {
+                    $scope.pageChange();
+                });
+
+                $scope.$watch('columns', function() {
+                    $scope.$$phase || $scope.$root.$$phase || $rootScope.$apply();
+                });
+
+
+                // controller functionality
+                // ---------------------------------------
+
+                function addColumn(colScope) {
                     columns.push({
                         field: colScope.field,
                         header: colScope.header,
@@ -44,17 +62,17 @@
                         sorted: colScope.field && colScope.field==$scope.sortField,
                         sortOrder: $scope.sortOrder || 1
                     });
-                };
+                }
 
-                this.changeColumnVisibility = $scope.control.changeColumnVisibility = function(header, visible) {
+                function changeColumnVisibility(header, visible) {
                     columns.forEach(function(cell) {
                         if ( cell.header == header ) {
                             cell.visible = !!visible;
                         }
                     });
-                };
+                }
 
-                $scope.changeSortBy = function(col) {
+                function changeSortBy(col) {
                     if (!col.sortable) return;
 
                     columns.forEach(function(c) {
@@ -69,15 +87,15 @@
                     $scope.sortChange(col.field, col.sortOrder);
 
                     console.log(col);
-                };
+                }
 
-                $scope._pageChange = function() {
+                function pageChange() {
                     $timeout(function() {
-                        if ($scope.pageChange) $scope.pageChange();
+                        if ($scope._pageChange) $scope._pageChange();
                     });
-                };
+                }
 
-                $scope.control.getHeaders = function() {
+                function getHeaders() {
                     var gridHeaders = [];
                     var gridFields = [];
                     columns.forEach(function(column) {
@@ -90,15 +108,7 @@
                         'headers': gridHeaders,
                         'fields': gridFields
                     };
-                };
-
-                $scope.$watch('itemsPerPage', function() {
-                    $scope.pageChange();
-                });
-
-                $scope.$watch('columns', function() {
-                    $scope.$$phase || $scope.$root.$$phase || $rootScope.$apply();
-                });
+                }
             },
             link: function(scope, elem, attrs, gridCtrl) {
                 scope.selectColumn = function($event, col) {
@@ -169,8 +179,8 @@
             }
         };
     })
-    
-    
+
+
     .directive('convertToNumber', function() {
         return {
             require: 'ngModel',
@@ -259,7 +269,7 @@
             '    				items-per-page="itemsPerPage"\n' +
             '    				max-size="10"\n' +
             '    				ng-model="currentPage"\n' +
-            '    				ng-change="_pageChange()"\n' +
+            '    				ng-change="pageChange()"\n' +
             '                                                   ' +
             '    				rotate="false"\n' +
             '    				boundary-links="true"\n' +
