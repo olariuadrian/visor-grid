@@ -26,12 +26,14 @@
 
                 $scope.control = $scope.control || {};
                 $scope.currentPage = $scope.currentPage || 1;
-                $scope.itemsPerPage = 10;
+                $scope.itemsPerPage = $scope.itemsPerPage || 10;
                 $scope.showPagination = $scope.showPagination===undefined?true:$scope.showPagination;
 
 
                 var columns = $scope.columns = $scope.control.columns = [];
+                var rowConfig = this.rowConfig = $scope.rowConfig = $scope.control.rowConfig = {};
 
+                this.setRowConfig = setRowConfig;
                 this.addColumn = addColumn;
                 this.changeColumnVisibility = $scope.control.changeColumnVisibility = changeColumnVisibility;
                 $scope.changeSortBy = changeSortBy;
@@ -49,6 +51,11 @@
 
                 // controller functionality
                 // ---------------------------------------
+
+
+                function setRowConfig(rowConfigScope) {
+                    rowConfig = this.rowConfig = $scope.rowConfig = $scope.control.rowConfig = rowConfigScope;
+                }
 
                 function addColumn(colScope) {
                     columns.push({
@@ -121,6 +128,20 @@
         };
     })
 
+    .directive('visorGridRowConfig',function($compile) {
+        return {
+            require: '^visorGrid',
+            scope: {
+                css: '@'
+            },
+            restrict: 'E',
+            replace: true,
+            link: function(scope, elem, attrs, gridCtrl) {
+                gridCtrl.setRowConfig(scope);
+            }
+        };
+    })
+
     .directive('visorGridCol',function($compile) {
         return {
             require: '^visorGrid',
@@ -134,7 +155,7 @@
             restrict: 'E',
             replace: true,
             transclude: true,
-            templateUrl: 'templates/visorGrid/visor-grid-cell.html',
+            templateUrl: 'templates/visorGrid/visor-grid-col.html',
             link: function(scope, elem, attrs, gridCtrl) {
                 scope.visible = scope.visible===undefined?true:!!scope.visible;
                 scope.isIndex = scope.isIndex===undefined?false:!!scope.isIndex;
@@ -150,32 +171,48 @@
         };
     })
 
-    .directive('visorGridCell', function($compile) {
+    .directive('visorGridCell', function($compile, $interpolate) {
         return {
+            require: '^visorGrid',
             scope: {
                 col: '=',
                 rowData: '=',
                 row: '=',
                 index: '='
             },
-            restrict: 'E',
+            restrict: 'EA',
             replace: true,
-            link: function(scope, elem, attrs) {
+            transclude: false,
+            templateUrl: 'templates/visorGrid/visor-grid-cell.html',
+            link: function(scope, elem, attrs, gridCtrl) {
+                scope.rowData = scope.rowData || {};
+                scope.rowData.__vGridIndex = scope.index;
+
+                // compile row class
+                scope.css = $interpolate('{{' + (gridCtrl.rowConfig && gridCtrl.rowConfig.css || '') + '}}')(scope.rowData);
+
+                // compile cell template
+                var cellTemplate = scope.col.cellTemplate;
                 if (scope.col.isIndex) {
-                    elem.html('<div>{{vGridIndex}}</div>');
-                } else {
-                    elem.html(scope.col.cellTemplate);
+                    cellTemplate = '<div>{{__vGridIndex}}</div>';
                 }
+
+                elem.html($interpolate(cellTemplate)(scope.rowData));
+
+                /*
+                Alternative compile
 
                 var compileScope = scope.$new(true);
                 angular.extend(compileScope, scope.rowData);
                 angular.extend(compileScope, {
+                    css: 'danger',
                     vGridIndex: scope.index,
                     context: {
                         index: scope.index
                     }
                 });
                 $compile(elem.contents())(compileScope);
+                */
             }
         };
     })
@@ -235,13 +272,14 @@
             '                </thead>\n' +
             '                <tbody>\n' +
             '                    <tr ng-repeat="row in rows">\n' +
-            '                        <td ng-repeat="col in columns" colspan="{{$last?2:1}}" ng-if="col.visible">\n' +
-            '                            <visor-grid-cell\n' +
-            '                                col="col"\n' +
-            '                                row-data="row"\n' +
-            '                                index="(currentPage-1)*itemsPerPage + $parent.$parent.$index + 1"\n' +
-            '                            />\n' +
-            '                        </td>\n' +
+            '                       <td visor-grid-cell\n' +
+            '                           ng-repeat="col in columns"\n' +
+            '                           ng-if="col.visible"\n' +
+            '                           colspan="{{$last?2:1}}"\n' +
+            '                           col="col"\n' +
+            '                           row-data="row"\n' +
+            '                           index="(currentPage-1)*itemsPerPage + $parent.$parent.$index + 1"\n' +
+            '                       ></td>\n' +
             '                    </tr>\n' +
             '                </tbody>\n' +
             '            </table>\n' +
@@ -288,10 +326,18 @@
     ])
 
     .run(["$templateCache", function($templateCache) {
+        $templateCache.put("templates/visorGrid/visor-grid-col.html",
+            '<div ng-transclude></div>\n' +
+            "");
+        }
+    ])
+
+    .run(["$templateCache", function($templateCache) {
         $templateCache.put("templates/visorGrid/visor-grid-cell.html",
-            '<td width="100" ng-transclude></td>\n' +
+            '<td ng-colspan="colspan" ng-class="css"></td> ' +
             "");
         }
     ]);
+
 
 })(angular);
