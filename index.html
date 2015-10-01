@@ -27,6 +27,8 @@
     		<visor-grid rows="countries" row-count="totalItems"
     			current-page="currentPage" items-per-page="itemsPerPage" page-change="pageChanged()"
     			control="vGridControl">
+    		        <visor-grid-row-config css="countryName=='Andorra'?'danger':''" />
+
     				<visor-grid-col header="#" is-index="true"></visor-grid-col>
     				<visor-grid-col header="Country" field="countryName">{{countryName}}</visor-grid-col>
     				<visor-grid-col header="Continent">{{continentName}}</visor-grid-col>
