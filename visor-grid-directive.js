@@ -30,9 +30,11 @@
                 $scope.showPagination = $scope.showPagination===undefined?true:$scope.showPagination;
 
 
+                // properties
                 var columns = $scope.columns = $scope.control.columns = [];
                 var rowConfig = this.rowConfig = $scope.rowConfig = $scope.control.rowConfig = {};
 
+                // methods
                 this.setRowConfig = setRowConfig;
                 this.addColumn = addColumn;
                 this.changeColumnVisibility = $scope.control.changeColumnVisibility = changeColumnVisibility;
@@ -49,7 +51,8 @@
                 });
 
 
-                // controller functionality
+
+                // methods implementation
                 // ---------------------------------------
 
 
@@ -136,6 +139,9 @@
             },
             restrict: 'E',
             replace: true,
+
+            controller: function($scope, $element) {
+            },
             link: function(scope, elem, attrs, gridCtrl) {
                 gridCtrl.setRowConfig(scope);
             }
@@ -156,6 +162,8 @@
             replace: true,
             transclude: true,
             templateUrl: 'templates/visorGrid/visor-grid-col.html',
+            controller: function($scope, $element) {
+            },
             link: function(scope, elem, attrs, gridCtrl) {
                 scope.visible = scope.visible===undefined?true:!!scope.visible;
                 scope.isIndex = scope.isIndex===undefined?false:!!scope.isIndex;
@@ -182,8 +190,10 @@
             },
             restrict: 'EA',
             replace: true,
-            transclude: false,
+            transclude: true,
             templateUrl: 'templates/visorGrid/visor-grid-cell.html',
+            controller: function($scope, $element) {
+            },
             link: function(scope, elem, attrs, gridCtrl) {
                 scope.rowData = scope.rowData || {};
                 scope.rowData.__vGridIndex = scope.index;
@@ -197,21 +207,13 @@
                     cellTemplate = '<div>{{__vGridIndex}}</div>';
                 }
 
-                elem.html($interpolate(cellTemplate)(scope.rowData));
-
-                /*
-                Alternative compile
-
                 var compileScope = scope.$new(true);
                 angular.extend(compileScope, scope.rowData);
-                angular.extend(compileScope, {
-                    css: 'danger',
-                    vGridIndex: scope.index,
-                    context: {
-                        index: scope.index
-                    }
-                });
+                elem.html(cellTemplate);
                 $compile(elem.contents())(compileScope);
+                /*
+                Alternative compile
+                elem.html($interpolate(cellTemplate)(scope.rowData));
                 */
             }
         };
@@ -243,7 +245,7 @@
             '<div class="visor-grid">\n' +
             '    <div style="display: none" ng-transclude></div>\n' +
             '    <div class="row">\n' +
-            '        <div class="table-responsive">\n' +
+            '        <div class="table-responsive" style="overflow: visible;">\n' +
             '            <table class="table table-striped table-hover">\n' +
             '                <thead>\n' +
             '                    <tr>\n' +
@@ -334,7 +336,7 @@
 
     .run(["$templateCache", function($templateCache) {
         $templateCache.put("templates/visorGrid/visor-grid-cell.html",
-            '<td ng-colspan="colspan" ng-class="css"></td> ' +
+            '<td ng-transclude ng-colspan="colspan" ng-class="css"></td> ' +
             "");
         }
     ]);
