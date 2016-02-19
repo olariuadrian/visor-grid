@@ -68,6 +68,7 @@
                         visible: colScope.visible,
                         isIndex: colScope.isIndex,
                         sortable: colScope.sortable,
+                        width: colScope.width,
 
                         sorted: colScope.field && colScope.field==$scope.sortField,
                         sortOrder: $scope.sortOrder || 1
@@ -156,7 +157,8 @@
                 header: '@',
                 isIndex: '=?',
                 visible: '=?',
-                sortable: '=?'
+                sortable: '=?',
+                width: '=?'
             },
             restrict: 'E',
             replace: true,
@@ -249,7 +251,7 @@
             '            <table class="table table-striped table-hover">\n' +
             '                <thead>\n' +
             '                    <tr>\n' +
-            '                        <td ng-repeat="col in columns" ng-if="col.visible" ng-click="changeSortBy(col)">\n' +
+            '                        <td ng-repeat="col in columns" ng-if="col.visible" width="{{col.width}}" ng-click="changeSortBy(col)">\n' +
             '                            <strong>{{col.header}}</strong>\n' +
             '                            <span ng-if="col.sorted" class="order" ng-class="{\'-1\':\'dropup\', \'1\':\'dropdown\'}[col.sortOrder]">\n' +
             '                                <span class="caret" style="margin: 10px 5px;"></span>\n' +
