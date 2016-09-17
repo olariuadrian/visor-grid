@@ -306,7 +306,7 @@
             '    	</div>\n' +
             '    	<div class="col-sm-6">\n' +
             '    		<div class="pull-right">\n' +
-            '    			<uib-pagination\n' +
+            '    			<ul uib-pagination\n' +
             '    				total-items="rowCount"\n' +
             '    				items-per-page="itemsPerPage"\n' +
             '    				max-size="10"\n' +
@@ -320,7 +320,7 @@
             '    				next-text="&rsaquo;"\n' +
             '    				first-text="&laquo;"\n' +
             '    				last-text="&raquo;">\n' +
-            '    			</uib-pagination>\n' +
+            '    			</ul>\n' +
             '    		</div>\n' +
             '    	</div>\n' +
             '    </div>\n' +
